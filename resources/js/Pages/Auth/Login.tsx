@@ -7,9 +7,8 @@ import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import SubmitButton from "@/Components/ui/submit_button";
 import Error from "@/Components/ui/error";
-import { FcGoogle } from "react-icons/fc";
 import { Checkbox } from "@/Components/ui/checkbox";
-
+import GoogleIcon from "@mui/icons-material/Google";
 export default function Login({
     status,
     canResetPassword,
@@ -131,12 +130,12 @@ export default function Login({
                     </div>
                 </div>
                 <Button variant="outline" type="button" disabled={false}>
-                    <FcGoogle size={25} className="mr-2" /> Google
+                    <GoogleIcon className="mr-2" /> Google
                 </Button>
             </div>
 
             <p className="px-8 text-center text-sm text-muted-foreground">
-                Don't have account? {" "}
+                Don't have account?{" "}
                 <Link
                     href="/register"
                     className="underline underline-offset-4 hover:text-primary"

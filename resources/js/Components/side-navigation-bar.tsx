@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { GrSchedule } from "react-icons/gr";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Link } from "@inertiajs/react";
 
 interface SideNavigationBarProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -21,7 +21,7 @@ export function SideNavigationBar({ className }: SideNavigationBarProps) {
                                 variant={route().current('dashboard')?"secondary":"ghost"}
                                 className="w-full justify-start"
                             >
-                                <LuLayoutDashboard size={17} className="mr-2" />
+                                <DashboardIcon className="mr-3" />
                                 Dashboard
                             </Button>
                         </Link>
@@ -31,7 +31,7 @@ export function SideNavigationBar({ className }: SideNavigationBarProps) {
                                 variant={route().current('schedulers*')?"secondary":"ghost"}
                                 className="w-full justify-start"
                             >
-                                <GrSchedule size={17} className="mr-2" />
+                                <CalendarMonthIcon  className="mr-3" />
                                 Scheduler
                             </Button>
                         </Link>

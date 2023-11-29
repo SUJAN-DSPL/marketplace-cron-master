@@ -1,6 +1,5 @@
 "use client";
 
-import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,6 +10,8 @@ import {
 import { Button } from "@/Components/ui/button";
 import { FC } from "react";
 import { useTheme } from "@/Components/context/theme-provider";
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 interface ThemeTogglerProps {}
 
@@ -21,11 +22,12 @@ const ThemeToggler: FC<ThemeTogglerProps> = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
-                    <BsSunFill className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <BsMoonStarsFill className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <WbSunnyIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <DarkModeIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                     <span className="sr-only">Toggle theme</span>
                 </Button>
             </DropdownMenuTrigger>
+            
             <DropdownMenuContent
                 align="end"
                 className="p-1 border rounded-md mt-3 cursor-pointer w-28 bg-background"
