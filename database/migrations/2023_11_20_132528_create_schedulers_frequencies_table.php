@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShedulerFrequenciesTable extends Migration
+class CreateSchedulersFrequenciesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateShedulerFrequenciesTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('sheduler_frequencies', function (Blueprint $table) {
+        Schema::create('schedulers_frequencies', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('frequency_id');
             $table->foreign('frequency_id')->references('id')->on('frequencies');
@@ -35,6 +35,6 @@ class CreateShedulerFrequenciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sheduler_frequencies');
+        Schema::dropIfExists('schedulers_frequencies');
     }
 }

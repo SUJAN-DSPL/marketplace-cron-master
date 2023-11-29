@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CronStatus;
+use Database\Seeders\CronStatusSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +18,9 @@ class CreateCronStatusesTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('cron_statuses', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->primary();
             $table->string('label');
-            $table->string('description');
+            $table->tinyText('description')->nullable();
             $table->timestamps();
         });
 

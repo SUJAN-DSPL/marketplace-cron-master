@@ -19,7 +19,10 @@ class CreateFrequenciesTable extends Migration
             $table->id();
             $table->string('label');
             $table->string('method');
-            $table->json('params_details');
+            $table->json('params_details')->nullable();
+            $table->text('description');
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

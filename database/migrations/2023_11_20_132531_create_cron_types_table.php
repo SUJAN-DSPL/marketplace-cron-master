@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Database\Seeders\CronTypeSeeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateCronTypesTable extends Migration
 {
@@ -16,8 +18,9 @@ class CreateCronTypesTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('cron_types', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->primary();
             $table->string('name');
+            $table->tinyText('description')->nullable();
             $table->timestamps();
         });
 

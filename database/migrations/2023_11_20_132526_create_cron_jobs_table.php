@@ -16,9 +16,14 @@ class CreateCronJobsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('cron_jobs', function (Blueprint $table) {
-            $table->id();
+            $table->uuid()->autoIncrement();
             $table->string('name');
             $table->string('path');
+            $table->string('description');
+            $table->integer('cron_type_id');
+            $table->foreign('cron_type_id')->references('id')->on('cron_types');
+            $table->integer('allocation_id');
+            $table->foreign('allocation_id')->references('id')->on('allocations');
             $table->timestamps();
         });
 

@@ -19,8 +19,8 @@ class CreateCronLogsTable extends Migration
             $table->id();
             $table->integer('scheduler_id')->index();
             $table->foreign('scheduler_id')->references('id')->on('schedulers');
-            $table->timestamp('started_at');
-            $table->timestamp('ended_at');
+            $table->timestamp('started_at')->useCurrent();
+            $table->timestamp('ended_at')->nullable();
             $table->integer('cron_status_id');
             $table->foreign('cron_status_id')->references('id')->on('cron_statuses');
             $table->json('errors');

@@ -1,7 +1,9 @@
 <?php
 
+use Database\Seeders\AllocationSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateAllocationsTable extends Migration
@@ -16,8 +18,9 @@ class CreateAllocationsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('allocations', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->primary();
             $table->string('name');
+            $table->tinyText('description')->nullable();
             $table->timestamps();
         });
 
