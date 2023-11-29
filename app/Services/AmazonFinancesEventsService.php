@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class AmazonFinancesEventsService
 {
-
     public function createShipmentEventListsFromResponse(array $shipmentEventLists)
     {
         $shipmentEventLists = array_map(function ($list) {

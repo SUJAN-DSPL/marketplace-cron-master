@@ -27,22 +27,23 @@ class AuthApiService
         string $lwaClientId,
         string $lwaClientSecret
     ) {
-        try {
-            $response =  Http::post(
-                config("amazon_sp_api.auth_token_host") . "/auth/o2/token",
-                [
-                    'grant_type' => 'refresh_token',
-                    'refresh_token' => $lwaRefreshToken,
-                    'client_id' => $lwaClientId,
-                    'client_secret' => $lwaClientSecret
-                ]
-            );
 
-            $resposeData = $response->json();
-            return $resposeData['access_token'];
-        } catch (\Throwable $th) {
-            //throw $th;
+        $response =  Http::post(
+            config("amazon_sp_api.auth_token_host") . "/auth/o2/token",
+            [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $lwaRefreshToken,
+                'client_id' => $lwaClientId,
+                'client_secret' => $lwaClientSecret
+            ]
+        );
+
+        if ($response->getStatusCode() != 200) {
+            throw new BadRequestException($response->json()['error_description']);
         }
+
+        $responseData = $response->json();
+        return $responseData['access_token'];
     }
 
     public function fetch()
@@ -65,24 +66,5 @@ class AuthApiService
     public function throwAmazonError(Response $response)
     {
         throw new BadRequestException($response->json()['errors'][0]['message']);
-    }
-
-    public function tryCatch(callable $callBack)
-    {
-        try {
-            return $callBack();
-        } catch (\Throwable $th) {
-            $errorMethod = $th->getTrace()[0]['function'] ?? 'N/A';
-            $errorLine = $th->getLine();
-            $errorClass = $th->getFile();
-            $errorMessage = $th->getMessage();
-
-            dump("Error in method: $errorMethod");
-            dump("line: $errorLine");
-            dump("class: $errorClass");
-            dump("error message: $errorMessage");
-
-            throw new BadRequestException($th->getMessage() ?? "internal server error");
-        }
     }
 }

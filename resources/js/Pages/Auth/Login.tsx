@@ -129,7 +129,12 @@ export default function Login({
                         </span>
                     </div>
                 </div>
-                <Button variant="outline" type="button" disabled={false}>
+                <Button
+                    variant="outline"
+                    className=" hover:text-muted-foreground"
+                    type="button"
+                    disabled={false}
+                >
                     <GoogleIcon className="mr-2" /> Google
                 </Button>
             </div>

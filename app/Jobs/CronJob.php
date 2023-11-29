@@ -2,9 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Scheduler;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,11 +26,8 @@ abstract class CronJob
      */
     public function handle(): void
     {
-        try {
-            $this->execute();
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        // try catch is a custom helper method
+        tryCatch(fn () => $this->execute());
     }
 
     abstract public function execute();
