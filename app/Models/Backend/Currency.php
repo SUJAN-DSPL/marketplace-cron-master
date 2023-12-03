@@ -18,6 +18,6 @@ class Currency extends Model
 
     public static function convertIntoGBP($currencyName, $amount)
     {
-        return round(self::where('currency_name', $currencyName)->first()->exchange_rate * $amount);
+        return round((self::where('currency_name', $currencyName)->first()->exchange_rate * $amount), 2);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CronJobController;
+use App\Http\Controllers\FrequencyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchedulerController;
 use Illuminate\Foundation\Application;
@@ -32,8 +33,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('schedulers', SchedulerController::class);
+    Route::get('/all-schedulers', [SchedulerController::class,'getSchedulers'])->name("all-schedulers");
+    Route::get('/timezones', [SchedulerController::class, 'getTimezones'])->name("timezones");
+    Route::get('/cron-jobs', [SchedulerController::class, 'getCronJobs'])->name("cron-jobs");
 
-    Route::resource('cron-jobs', CronJobController::class);
+    Route::resource('frequencies',FrequencyController::class);
+    Route::get("frequencies", [FrequencyController::class, 'getFrequencies'])->name("frequencies");
 });
 
 

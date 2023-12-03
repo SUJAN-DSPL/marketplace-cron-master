@@ -4,59 +4,70 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Number;
+use App\Models\RefundEventList;
 use App\Models\Backend\Currency;
 use App\Models\Backend\OrderMaster;
 use App\Models\Backend\AmazonProductMap;
 use App\Models\Backend\OrderPartialRefund;
 use App\Models\Backend\AmazonMwsAccountPanEu;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class BackendOrderUpdateService
 {
     public function updateWithAmazonRefundEventLists($refundEventLists) // * main method
     {
-        $refundEventLists->each(function ($list) {
-            // $order = OrderMaster::where("order_id", "334429855")->first();
-
-            $order = $this->getOrderFromTransactionId($list->amazon_order_id);
-
-            if (!$order || $order->current_status == OrderMaster::REFUND_STATUS_ID) return;
-
-            $orderMarketPlaceId = AmazonMwsAccountPanEu::getMarketIdByDomainId($order->domain_id);
-
-            $this->updateOrderByAdjustmentList(
-                $order,
-                $list->shipment_item_adjustment_list
-            );
-
-            $this->updateOrderDetailsByAdjustmentList(
-                $order,
-                $orderMarketPlaceId,
-                $list->shipment_item_adjustment_list
-            );
-
-            $this->updateOrderProcessingByAdjustmentList(
-                $order,
-                $list->shipment_item_adjustment_list
-            );
-
-            $this->createOrderPartialByAdjustmentList(
-                $order,
-                $list->shipment_item_adjustment_list
-            );
-
-            $this->createLogEntry(
-                $order,
-                $list->shipment_item_adjustment_list
-            );
+        $refundEventLists->each(function ($refundEventList) {
+            try {
+                $this->syncRefundDataToBackend($refundEventList);
+                dump($refundEventList->amazon_order_id);
+            } catch (\Throwable $th) {
+                (new FailedRefundEventListService())
+                    ->addException($refundEventList->id, $th->getMessage(), self::class, $th->getTrace()[0]['function']);
+            }
         });
-
-        dump(
-            $refundEventLists->first()->posted_date,
-            $refundEventLists->reverse()->first()->posted_date
-        );
     }
 
     // * sub methods
+
+    public function syncRefundDataToBackend(RefundEventList $refundEventList)
+    {
+        // $order = OrderMaster::where("order_id", "334429855")->first();
+        $order = $this->getOrderFromTransactionId($refundEventList->amazon_order_id);
+
+        if (!$order) throw new BadRequestException(
+            "Amazon Order Id $refundEventList->amazon_order_id Not Found inside order_master table"
+        );
+
+        if ($order->current_status == OrderMaster::REFUND_STATUS_ID) return;
+
+        $orderMarketPlaceId = AmazonMwsAccountPanEu::getMarketIdByDomainId($order->domain_id);
+
+        $this->updateOrderByAdjustmentList(
+            $order,
+            $refundEventList->shipment_item_adjustment_list
+        );
+
+        $this->updateOrderDetailsByAdjustmentList(
+            $order,
+            $orderMarketPlaceId,
+            $refundEventList->shipment_item_adjustment_list
+        );
+
+        $this->updateOrderProcessingByAdjustmentList(
+            $order,
+            $refundEventList->shipment_item_adjustment_list
+        );
+
+        $this->createOrderPartialByAdjustmentList(
+            $order,
+            $refundEventList->shipment_item_adjustment_list
+        );
+
+        $this->createLogEntry(
+            $order,
+            $refundEventList->shipment_item_adjustment_list
+        );
+    }
 
     public function updateOrderByAdjustmentList(OrderMaster $order, array $lists)
     {
@@ -68,7 +79,7 @@ class BackendOrderUpdateService
 
         $order->update([
             'current_status' => OrderMaster::REFUND_STATUS_ID,
-            'refund_from' => 0, // * doubt
+            'refund_from' => OrderMaster::ORDER_FROM_HISTORIC_ID,
             'refund_vat_amazon_lc' => $refundVatAmazonLc,
             'refund_vat_amazon' => $totalRefundTaxAmount
         ]);
@@ -93,7 +104,7 @@ class BackendOrderUpdateService
 
             $order->orderDetails()->where('product_code', $refundableItemsStockCode)
                 ->update([
-                    "prod_refund_amazon_vat" => round($prodRefundAmazonVat),
+                    "prod_refund_amazon_vat" => round($prodRefundAmazonVat, 2),
                     "prod_refund_amazon_vat_lc" => $refundTaxAmount,
                 ]);
         });
@@ -127,8 +138,7 @@ class BackendOrderUpdateService
 
         $exchangeRate = Currency::where('currency_name', $currencyCode)->first()->exchange_rate;
 
-        $order->orderPartialRefund()->updateOrCreate(
-            ['opr_order_id' => $order->order_id],
+        $order->orderPartialRefund()->create(
             [
                 'opr_refund_exchange_rate' => $exchangeRate,
                 'opr_refund_reason' => 'Amazon FBA Refund',
@@ -141,7 +151,7 @@ class BackendOrderUpdateService
                 'opr_archive_refund_by' => OrderMaster::REFUND_BY_AMAZON_ID,
                 'opr_approve_refund_by' => OrderMaster::REFUND_BY_AMAZON_ID,
                 'opr_approve_refund_date' => Carbon::now(),
-                'opr_refund_amount_requested' => 0 // * doubt
+                'opr_refund_amount_requested' => Currency::convertIntoGBP($currencyCode, $totalRefundableAmount)
             ]
         );
     }
@@ -159,7 +169,9 @@ class BackendOrderUpdateService
             'order_status' => OrderMaster::REFUND_STATUS_ID,
             'description' => $description,
             'date' => Carbon::now(),
-            'processed_by' => OrderMaster::REFUND_BY_AMAZON_ID
+            'processed_by' => OrderMaster::REFUND_BY_AMAZON_ID,
+            'processed_by_supp' => 0, // * doubt
+            'order_suspended_reason' => " " // * doubt
         ]);
     }
 

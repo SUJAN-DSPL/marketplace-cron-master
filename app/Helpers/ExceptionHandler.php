@@ -4,14 +4,15 @@ use Carbon\Carbon;
 use App\Notifications\MailNotification;
 use App\Notifications\SlackNotification;
 use Illuminate\Support\Facades\Notification;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 if (!function_exists('tryCatch')) {
 
     function tryCatch(callable $callBack, array $errorNotifyChannels = ["slack", "mail"], $type = "schedule")
     {
+        $exception = null;
+
         try {
-            return $callBack();
+            $callBack();
         } catch (\Throwable $th) {
             $errorMethod1 = $th->getTrace()[0]['function'] ?? 'N/A';
             $errorMethod2 = $th->getTrace()[1]['function'] ?? 'N/A';
@@ -38,7 +39,19 @@ if (!function_exists('tryCatch')) {
                 Notification::route('mail', env("ADMIN_EMAIL"))->notify(new MailNotification($errorMessage));
             }
 
-            throw new BadRequestException($errorMessage);
+            $exception = $th;
         }
+
+        return (object)[
+            'onSuccess' => function ($onSuccessCallBack) use ($exception) {
+                if ($exception) return;
+                $onSuccessCallBack();
+            },
+
+            'onFailure' => function ($onFailureCallBack) use ($exception) {
+                if (!$exception) return;
+                $onFailureCallBack($exception);
+            }
+        ];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateSchedulersTable extends Migration
 {
@@ -16,11 +16,14 @@ class CreateSchedulersTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('schedulers', function (Blueprint $table) {
-            $table->uuid()->autoIncrement();
+            $table->uuid()->primary();
+            $table->string("name");
+            $table->text("description");
             $table->boolean('is_active')->default(false);
+            $table->string('cron_job_class');
             $table->string('timezone')->default("Asia/Kolkata");
-            $table->integer('cron_job_id');
-            $table->foreign('cron_job_id')->references('id')->on('cron_jobs')->onDelete('cascade');
+            $table->json("notifiable_emails")->nullable();
+            $table->boolean("notify_on_slack")->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

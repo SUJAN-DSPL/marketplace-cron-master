@@ -15,6 +15,10 @@ class SchedulersFrequency extends Model
         'scheduler_id'
     ];
 
+    protected $casts = [
+        'frequency_params' => 'array',
+    ];
+
 
     // * Relations
 

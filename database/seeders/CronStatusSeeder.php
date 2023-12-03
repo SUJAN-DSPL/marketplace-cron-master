@@ -32,7 +32,7 @@ class CronStatusSeeder extends Seeder
             [
                 'id' => 4,
                 'label' => 'Failed',
-                'description' => 'Cronn has been Failed'
+                'description' => 'Cron has been Failed'
             ]
         ];
 

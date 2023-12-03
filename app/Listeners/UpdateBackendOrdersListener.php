@@ -23,7 +23,7 @@ class UpdateBackendOrdersListener implements ShouldQueue
      */
     public function handle(object $event): void
     {
-        try {
+        tryCatch(function () use ($event) {
             $postedDateRange = $event->postedDateRange;
 
             $afterRefundEventLists = (new AmazonFinancesEventsService())
@@ -33,9 +33,6 @@ class UpdateBackendOrdersListener implements ShouldQueue
 
             (new BackendOrderUpdateService())
                 ->updateWithAmazonRefundEventLists($afterRefundEventLists);
-        } catch (\Throwable $th) {
-            //throw $th;
-            dump($th->getMessage());
-        }
+        }, type: self::class);
     }
 }

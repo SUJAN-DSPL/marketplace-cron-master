@@ -33,7 +33,6 @@ class AmazonMwsAccountPanEu extends Model
 
         $marketId = $marketId ?? AmazonMwsAccountPanEu::query()
             ->where('mws_domain_id', "LIKE", "%$domainId%")
-            ->pluck('mws_marketplace_id')
             ->first()
             ?->mws_marketplace_id;
 

@@ -46,12 +46,12 @@ class AuthApiService
         return $responseData['access_token'];
     }
 
+    // * common helper methods
+
     public function fetch()
     {
         return  Http::withHeaders(['x-amz-access-token' => $this->authToken]);
     }
-
-    // * common helper methods
 
     public function getEncodeURIComponent(string $data)
     {

@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use DateTimeZone;
 use Inertia\Inertia;
 use App\Models\Scheduler;
 use Illuminate\Http\Request;
+use App\Services\SchedulerService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\SchedulerCreateRequest;
+
 
 class SchedulerController extends Controller
 {
@@ -15,6 +20,7 @@ class SchedulerController extends Controller
      */
     public function index()
     {
+        return Inertia::render('scheduler/index');
     }
 
     /**
@@ -28,54 +34,13 @@ class SchedulerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SchedulerCreateRequest $request)
     {
-        // Log::channel('scheduler_create_logs')->info('New user logged in',  [
-        //     'label' => 'Between',
-        //     'method' => 'between',
-        //     'params_details' => [
-        //         [
-        //             'name' => 'startTime',
-        //             'description' => 'Specify the start time',
-        //             'rules' => [['required', 'string']]
-        //         ],
-        //         [
-        //             'name' => 'endTime',
-        //             'description' => 'Specify the end time',
-        //             'rules' => [['required', 'string']]
-        //         ],
-        //     ],
-        //     'is_active' => true,
-        //     'description' => 'Limit the task to run between start and end times'
-        // ]);
+        $schedulerService = new SchedulerService();
+        $scheduler = $schedulerService->create($request->all());
+        $scheduler->addFrequencies($request->get("frequencies"));
 
-        $logFilePath = app_path('Logs/scheduler_create.log');
-
-        // if (File::exists($logFilePath)) {
-        //     $logContent = File::get($logFilePath);
-        //     $logLines = explode("\n", $logContent);
-
-        //     $logContexts = [];
-
-        //     foreach ($logLines as $line) {
-        //         $jsonStartPos = strpos($line, '{');
-        //         if ($jsonStartPos !== false) {
-        //             $jsonString = substr($line, $jsonStartPos);
-        //             $logContexts[] = json_decode($jsonString, true);
-        //         }
-        //     }
-        //     dd($logContexts);
-        // } else {
-        //     dd("Log file not found or channel doesn't exist.");
-        // }
-
-        $data = [
-            'cron_job_id' => 1,
-            'time'
-        ];
-
-
-        // return response()->json(["hello"]);
+        return Redirect::route('schedulers.create');
     }
 
     /**
@@ -108,5 +73,31 @@ class SchedulerController extends Controller
     public function destroy(Scheduler $scheduler)
     {
         //
+    }
+
+    public function getCronJobs()
+    {
+        $folderPath = app_path('/Jobs');
+        $fileNames = [];
+
+        if (File::isDirectory($folderPath)) {
+            $files = File::files($folderPath);
+            $fileNames = array_map(fn ($f) => pathinfo($f, PATHINFO_FILENAME), $files);
+            $fileNames = array_values(array_filter($fileNames, fn ($f) => $f != "CronJob"));
+        }
+
+        return response()->json($fileNames);
+    }
+
+    public function getTimezones()
+    {
+        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+        return response()->json($timezones);
+    }
+
+    public function getSchedulers()
+    {
+        $schedulers = Scheduler::query()->with('frequencies')->get();
+        return  response()->json($schedulers);
     }
 }

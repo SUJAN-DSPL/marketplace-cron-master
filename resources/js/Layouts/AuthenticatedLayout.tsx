@@ -16,8 +16,8 @@ export default function Authenticated({
     return (
         <div className="min-h-screen bg-background">
             <div className="grid lg:grid-cols-5">
-                <div className="">
-                    <SideNavigationBar />
+                <div className="relative">
+                    <SideNavigationBar className=" w-full"/>
                 </div>
 
                 <div className="col-span-3 lg:col-span-4 lg:border-l min-h-screen">

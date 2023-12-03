@@ -62,4 +62,9 @@ class FrequencyController extends Controller
     {
         //
     }
+
+    public function getFrequencies()
+    {
+        return response()->json(Frequency::all());
+    }
 }

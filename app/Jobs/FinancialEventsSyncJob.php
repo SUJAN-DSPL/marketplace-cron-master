@@ -9,7 +9,7 @@ use App\Services\AmazonSpApi\FinanceApiService;
 
 class FinancialEventsSyncJob extends CronJob
 {
-	const INITIAL_POSTED_DATE = "2023-11-25T07:40:00Z";
+	const INITIAL_POSTED_DATE = "2023-09-19T11:50:33Z";
 	const MAX_NUM_OF_API_CALL = "100";
 
 	/**
@@ -19,7 +19,8 @@ class FinancialEventsSyncJob extends CronJob
 	public function execute()
 	{
 		$lastShipmentEvent = (new AmazonFinancesEventsService())->getLastShipmentEventList();
-		$postedAfterTimeStamp = $lastShipmentEvent?->posted_date ?? Self::INITIAL_POSTED_DATE;
+		
+		$postedAfter = $lastShipmentEvent?->posted_date ?? Self::INITIAL_POSTED_DATE;
 		$eventNames = ["ShipmentEventList", 'RefundEventList'];
 
 		$data = null;
@@ -29,7 +30,7 @@ class FinancialEventsSyncJob extends CronJob
 			if ($totalNoOfApiCall == self::MAX_NUM_OF_API_CALL) break;
 
 			$data = (new FinanceApiService())
-				->getFinancialEventsData($eventNames, $postedAfterTimeStamp, nextToken: $data?->nextToken);
+				->getFinancialEventsData($eventNames, $postedAfter, nextToken: $data?->nextToken);
 
 			(new AmazonFinancesEventsService())->createShipmentEventListsFromResponse($data->financialEvents["ShipmentEventList"]);
 			(new AmazonFinancesEventsService())->createRefundEventListsFromResponse($data->financialEvents["RefundEventList"]);
@@ -46,8 +47,6 @@ class FinancialEventsSyncJob extends CronJob
 			Carbon::parse($refundEventList[0]['PostedDate'])->format('Y-m-d H:i:s'),
 			Carbon::parse(array_pop($refundEventList)['PostedDate'])->format('Y-m-d H:i:s'),
 		];
-
-		dump($postedDateRange);
 
 		event(new UpdateBackendOrdersEvent($postedDateRange));
 	}

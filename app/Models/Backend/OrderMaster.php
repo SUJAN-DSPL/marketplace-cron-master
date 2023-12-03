@@ -11,6 +11,7 @@ class OrderMaster extends Model
 
     const REFUND_STATUS_ID = 12;
     const REFUND_BY_AMAZON_ID = 201;
+    const ORDER_FROM_HISTORIC_ID = 10;
 
     protected $connection = 'backend_mysql';
     protected $table = 'order_master';
@@ -43,6 +44,6 @@ class OrderMaster extends Model
 
     public function orderLog()
     {
-        return $this->hasMany(OrderLog::class, 'order_id', 'order_id');
+        return $this->hasMany(OrderLog::class, 'order_id', 'id');
     }
 }

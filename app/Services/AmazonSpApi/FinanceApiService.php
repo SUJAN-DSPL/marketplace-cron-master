@@ -34,8 +34,8 @@ class FinanceApiService extends AuthApiService
         $financialEvents = $response->json()['payload']['FinancialEvents'];
         $financialEvents = array_intersect_key($financialEvents, array_flip($financialEventNames));
 
-        $isIssetNextToken = isset($response->json()['payload']['NextToken']);
-        $nextToken = $isIssetNextToken ? $response->json()['payload']['NextToken'] : null;
+        $isSetNextToken = isset($response->json()['payload']['NextToken']);
+        $nextToken = $isSetNextToken ? $response->json()['payload']['NextToken'] : null;
 
         return $this->response(['nextToken' => $nextToken, 'financialEvents' => $financialEvents]);
     }
@@ -47,7 +47,9 @@ class FinanceApiService extends AuthApiService
             'orderId' => $orderId,
         ])->get('{+endpoint}/finances/v0/orders/{orderId}/financialEvents');
 
-        return $response->json();
+        if ($response->getStatusCode() != 200) $this->throwAmazonError($response);
+
+        return $response->json()['payload']["FinancialEvents"];
     }
 
     // * helpers methods 
@@ -60,17 +62,3 @@ class FinanceApiService extends AuthApiService
     }
 }
 
-
-
-
-// ShipmentEventList
-
-// ShipmentSettleEventList
-
-// RefundEventList
-
-// ServiceFeeEventList
-
-// AdjustmentEventList
-
-// RemovalShipmentEventList

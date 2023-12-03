@@ -10,7 +10,7 @@ class OrderLog extends Model
     use HasFactory;
 
     protected $table = "order_log";
-
+    protected $connection = 'backend_mysql';
     public $timestamps = false;
 
     protected $fillable = [
@@ -18,6 +18,8 @@ class OrderLog extends Model
         'order_status',
         'description',
         'date',
-        'processed_by'
+        'processed_by',
+        'processed_by_supp',
+        'order_suspended_reason'
     ];
 }
