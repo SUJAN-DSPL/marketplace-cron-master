@@ -9,6 +9,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "./ui/accordion";
+import TerminalIcon from '@mui/icons-material/Terminal';
 
 interface SideNavigationBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -22,7 +23,7 @@ export function SideNavigationBar({ className }: SideNavigationBarProps) {
                         <span>Master</span>
                     </h2>
                     <div className=" mt-5">
-                        <Accordion type="single" collapsible className="w-full">
+                        <Accordion type="single" collapsible className="w-full flex gap-2 flex-col">
                             <Link href={route("dashboard")}>
                                 <Button
                                     variant={
@@ -39,7 +40,7 @@ export function SideNavigationBar({ className }: SideNavigationBarProps) {
 
                             <AccordionItem
                                 value="item-1"
-                                className="w-full p-0 border-none mt-2"
+                                className="w-full p-0 border-none"
                             >
                                 <AccordionTrigger className="w-full">
                                     <Button
@@ -55,6 +56,7 @@ export function SideNavigationBar({ className }: SideNavigationBarProps) {
                                         {/* <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" /> */}
                                     </Button>
                                 </AccordionTrigger>
+                                
                                 <AccordionContent className="flex flex-col gap-1 border rounded-md p-1 mt-1">
                                     <Link href={route("schedulers.index")}>
                                         <Button
@@ -87,6 +89,20 @@ export function SideNavigationBar({ className }: SideNavigationBarProps) {
                                     </Link>
                                 </AccordionContent>
                             </AccordionItem>
+
+                            <Link href={route("cron-logs.index")}>
+                                <Button
+                                    variant={
+                                        route().current("cron-logs.index")
+                                            ? "secondary"
+                                            : "ghost"
+                                    }
+                                    className="w-full justify-start"
+                                >
+                                    <TerminalIcon className="mr-3" />
+                                    Logs
+                                </Button>
+                            </Link>
                         </Accordion>
                     </div>
                 </div>

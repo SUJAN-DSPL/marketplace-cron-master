@@ -12,26 +12,26 @@ use App\Models\Backend\OrderPartialRefund;
 use App\Models\Backend\AmazonMwsAccountPanEu;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-class BackendOrderUpdateService
+class BackendRefundedOrdersUpdateService
 {
-    public function updateWithAmazonRefundEventLists($refundEventLists) // * main method
+    public function updateOrders($refundEventLists) // * main method
     {
         $refundEventLists->each(function ($refundEventList) {
             try {
-                $this->syncRefundDataToBackend($refundEventList);
-                dump($refundEventList->amazon_order_id);
+                $this->updateByRefundEventList($refundEventList);
+                // dump($refundEventList->amazon_order_id);
             } catch (\Throwable $th) {
-                (new FailedRefundEventListService())
-                    ->addException($refundEventList->id, $th->getMessage(), self::class, $th->getTrace()[0]['function']);
+                $refundEventList->addFailedEvent($th);
             }
         });
     }
 
     // * sub methods
 
-    public function syncRefundDataToBackend(RefundEventList $refundEventList)
+    public function updateByRefundEventList(RefundEventList $refundEventList)
     {
         // $order = OrderMaster::where("order_id", "334429855")->first();
+
         $order = $this->getOrderFromTransactionId($refundEventList->amazon_order_id);
 
         if (!$order) throw new BadRequestException(

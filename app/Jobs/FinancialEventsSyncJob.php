@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use Carbon\Carbon;
-use App\Events\UpdateBackendOrdersEvent;
+use App\Events\RefundEventListsCreatedEvent;
 use App\Services\AmazonFinancesEventsService;
 use App\Services\AmazonSpApi\FinanceApiService;
 
@@ -19,7 +19,7 @@ class FinancialEventsSyncJob extends CronJob
 	public function execute()
 	{
 		$lastShipmentEvent = (new AmazonFinancesEventsService())->getLastShipmentEventList();
-		
+
 		$postedAfter = $lastShipmentEvent?->posted_date ?? Self::INITIAL_POSTED_DATE;
 		$eventNames = ["ShipmentEventList", 'RefundEventList'];
 
@@ -35,11 +35,11 @@ class FinancialEventsSyncJob extends CronJob
 			(new AmazonFinancesEventsService())->createShipmentEventListsFromResponse($data->financialEvents["ShipmentEventList"]);
 			(new AmazonFinancesEventsService())->createRefundEventListsFromResponse($data->financialEvents["RefundEventList"]);
 
-			$this->fireUpdateBackendOrderEvent($data->financialEvents["RefundEventList"]);
+			$this->fireRefundEventListsCreatedEvent($data->financialEvents["RefundEventList"]);
 		} while ($data?->nextToken);
 	}
 
-	public function fireUpdateBackendOrderEvent($refundEventList)
+	public function fireRefundEventListsCreatedEvent($refundEventList)
 	{
 		if (!count($refundEventList)) return;
 
@@ -48,6 +48,6 @@ class FinancialEventsSyncJob extends CronJob
 			Carbon::parse(array_pop($refundEventList)['PostedDate'])->format('Y-m-d H:i:s'),
 		];
 
-		event(new UpdateBackendOrdersEvent($postedDateRange));
+		event(new RefundEventListsCreatedEvent($postedDateRange));
 	}
 }

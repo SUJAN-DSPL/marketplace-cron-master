@@ -18,7 +18,7 @@ class CreateSchedulerFrequenciesTable extends Migration
         Schema::create('scheduler_frequencies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('frequency_id')->references('id')->on('frequencies')->onDelete('cascade');
-            $table->foreignUuid('scheduler_id')->references('id')->on('schedulers')->onDelete('cascade');
+            $table->foreignUuid('scheduler_id')->references('uuid')->on('schedulers')->onDelete('cascade');
             $table->json('frequency_params')->nullable();
             $table->timestamps();
         });

@@ -8,11 +8,16 @@ class FinanceApiService extends AuthApiService
 {
     const FINANCIAL_EVENT_NAMES = [
         "ShipmentEventList",
-        "ShipmentSettleEventList",
+
+        // "ShipmentSettleEventList",
+        // "ServiceFeeEventList",
+        // "AdjustmentEventList",
+        // "RemovalShipmentEventList",
+
         "RefundEventList",
-        "ServiceFeeEventList",
-        "AdjustmentEventList",
-        "RemovalShipmentEventList"
+        "RetrochargeEventList",
+        "RentalTransactionEventList",
+        "ServiceFeeEventList"
     ];
 
     public function getFinancialEventsData(
@@ -61,4 +66,3 @@ class FinanceApiService extends AuthApiService
         }
     }
 }
-

@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('amazon_orders', function (Blueprint $table) {
+        Schema::create('market_places', function (Blueprint $table) {
             $table->id();
-            $table->string('amazon_order_id')->unique();
-            $table->string('order_status');
-            $table->string("marketplace_id");
-            $table->timestamp('purchase_date');
-            $table->timestamp('last_update_date');
-            $table->json('order_meta_data');
-            $table->json('order_items')->nullable();
+            $table->string('market_place_id')->unique();
+            $table->string('domain')->unique();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('amazon_orders');
+        Schema::dropIfExists('market_places');
     }
 };

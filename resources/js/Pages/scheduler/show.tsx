@@ -1,5 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { PageProps, SchedulerFromInputsType } from "@/types";
+import {
+    PageProps,
+    SchedulerFromInputsType,
+    SchedulerReturnType,
+} from "@/types";
 import { Button } from "@/Components/ui/button";
 import {
     Card,
@@ -27,7 +31,10 @@ import { FormEventHandler, useEffect } from "react";
 import Error from "@/Components/ui/error";
 import useToastMessage from "@/Components/hooks/use-toast-message";
 
-const Create = ({ auth }: PageProps) => {
+const Show = ({
+    auth,
+    scheduler,
+}: PageProps<{ scheduler: SchedulerReturnType }>) => {
     const { timezones, frequencies, cronJobs } = useScheduler();
     const [setToasterMessage] = useToastMessage();
 
@@ -64,7 +71,7 @@ const Create = ({ auth }: PageProps) => {
     }, [recentlySuccessful]);
 
     return (
-        <AuthenticatedLayout user={auth.user} header={<p>/Scheduler/Create</p>}>
+        <AuthenticatedLayout user={auth.user} header={<p>/Scheduler/Update</p>}>
             <Card>
                 <CardHeader>
                     <CardTitle>Create Your Scheduler</CardTitle>
@@ -264,7 +271,7 @@ const Create = ({ auth }: PageProps) => {
                                     />
 
                                     <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                                             Notify on Slack
+                                        On Success Notify on Slack
                                     </span>
                                 </label>
                             </div>
@@ -286,7 +293,7 @@ const Create = ({ auth }: PageProps) => {
                                         }
                                     />
                                     <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                                        Mark as Active
+                                        Make it Active
                                     </span>
                                 </label>
                             </div>
@@ -302,4 +309,4 @@ const Create = ({ auth }: PageProps) => {
     );
 };
 
-export default Create;
+export default Show;

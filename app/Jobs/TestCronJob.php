@@ -14,7 +14,7 @@ class TestCronJob extends CronJob
 
 	public function execute()
 	{
-		throw new BadRequestException("hello world!");
+		// throw new BadRequestException("hello world!");
 
 		// try {
 		// 	throw new BadRequestException("hello world!");

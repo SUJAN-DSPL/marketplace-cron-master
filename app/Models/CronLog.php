@@ -29,7 +29,7 @@ class CronLog extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->ref_id = Str::uuid();
+            $model->ref_id = $model->ref_id ?? Str::uuid();
         });
     }
 

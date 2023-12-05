@@ -48,7 +48,7 @@ class SchedulerController extends Controller
      */
     public function show(Scheduler $scheduler)
     {
-        //
+        return Inertia::render('scheduler/show', ['scheduler' => $scheduler]);
     }
 
     /**

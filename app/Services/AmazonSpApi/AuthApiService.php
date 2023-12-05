@@ -15,8 +15,8 @@ class AuthApiService
     {
         $this->authToken = $this->getAuthToken(
             config("amazon_sp_api.lwa_refresh_token"),
-            config("amazon_sp_api.lwa_clinet_id"),
-            config("amazon_sp_api.lwa_clinet_secret"),
+            config("amazon_sp_api.lwa_client_id"),
+            config("amazon_sp_api.lwa_client_secret"),
         );
 
         $this->spApiHost = config("amazon_sp_api.host");

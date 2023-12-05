@@ -9,14 +9,14 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class UpdateBackendOrdersEvent
+class RefundEventListsCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public array $postedDateRange)
+    public function __construct(public array $purchaseDateRange)
     {
         //
     }

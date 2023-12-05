@@ -35,7 +35,7 @@ class MailNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("Error Message from" . config("app.name"))
+            ->subject(" Message from " . config("app.name"))
             ->greeting('Hello Admin')
             ->line($this->message);
     }

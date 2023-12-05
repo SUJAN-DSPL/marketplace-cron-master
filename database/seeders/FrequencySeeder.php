@@ -529,7 +529,7 @@ class FrequencySeeder extends Seeder
         ];
 
         foreach ($frequencies as $frequency) {
-            Frequency::query()->updateOrCreate($frequency, ['method' => $frequency['method']]);
+            Frequency::query()->updateOrCreate(['method' => $frequency['method']], $frequency);
         }
     }
 }

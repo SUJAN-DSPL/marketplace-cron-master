@@ -2,6 +2,8 @@
 
 namespace App\Services\AmazonSpApi;
 
+use Carbon\Carbon;
+
 class OrderApiService extends AuthApiService
 {
     public function getOrders(
@@ -21,6 +23,7 @@ class OrderApiService extends AuthApiService
             'NextToken' => $nextToken,
         ])->get($this->spApiHost . "/orders/v0/orders");
 
+
         if ($response->getStatusCode() != 200) $this->throwAmazonError($response);
 
         $orders = $response->json()['payload']['Orders'];
@@ -31,9 +34,29 @@ class OrderApiService extends AuthApiService
         return $this->response(['orders' => $orders, 'nextToken' => $nextToken]);
     }
 
+    public function getOrderItems($orderId)
+    {
+        $response = $this->fetch()->withUrlParameters([
+            'endpoint' => $this->spApiHost,
+            'orderId' => $orderId,
+        ])->get('{+endpoint}//orders/v0/orders/{orderId}/orderItems');
+
+        if ($response->getStatusCode() != 200) $this->throwAmazonError($response);
+
+        $orderItems = $response['payload']['OrderItems'];
+
+        return $this->response(['orderItems' => $orderItems]);
+    }
+
     public function getOrderById(string $orderId)
     {
-        $response = $this->fetch()->get($this->spApiHost . "/orders/v0/orders/$orderId");
-        return $response->json();
+        $response = $this->fetch()->withUrlParameters([
+            'endpoint' => $this->spApiHost,
+            'orderId' => $orderId,
+        ])->get('{+endpoint}//orders/v0/orders/{orderId}');
+
+        if ($response->getStatusCode() != 200) $this->throwAmazonError($response);
+
+        return $response->json()['payload'];
     }
 }

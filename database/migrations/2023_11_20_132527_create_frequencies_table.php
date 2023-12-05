@@ -18,7 +18,7 @@ class CreateFrequenciesTable extends Migration
         Schema::create('frequencies', function (Blueprint $table) {
             $table->id();
             $table->string('label');
-            $table->string('method');
+            $table->string('method')->unique();
             $table->json('params_details')->nullable();
             $table->text('description');
             $table->boolean('is_active')->default(true);

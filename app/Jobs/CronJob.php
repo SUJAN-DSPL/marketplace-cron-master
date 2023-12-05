@@ -33,7 +33,7 @@ abstract class CronJob
     {
         $this->log->saveLog(['cron_status_id' => CronStatus::RUNNING]);
 
-        $response = tryCatch(fn () => $this->execute());
+        $response = tryCatch(fn () => $this->execute(), type: $this->scheduler->cron_job_class);
 
         ($response->onSuccess)(function () {
             $this->log->saveLog(['cron_status_id' => CronStatus::COMPLETED]);

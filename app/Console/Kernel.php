@@ -23,9 +23,11 @@ class Kernel extends ConsoleKernel
                 $params = json_decode($frequency->pivot->frequency_params);
                 $schedule->{$frequency->method}(...$params);
             }
+
+            $schedule->withoutOverlapping(120)->onOneServer();
         });
 
-        // $schedule->job(new TestCronJob(Scheduler::first()))->everySecond();
+        // $schedule->job(new TestCronJob(Scheduler::first()))->everySecond()->withoutOverlapping(120)->onOneServer();
     }
 
     /**

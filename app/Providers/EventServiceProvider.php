@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use App\Events\UpdateBackendOrdersEvent;
-use App\Listeners\UpdateBackendOrdersListener;
 use Illuminate\Auth\Events\Registered;
+use App\Events\AmazonOrdersCreatedEvent;
+use App\Events\RefundEventListsCreatedEvent;
+use App\Listeners\CreateAmazonOrdersToBackendListener;
+use App\Listeners\UpdateRefundedOrdersToBackendListener;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,9 +21,13 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        
-        UpdateBackendOrdersEvent::class => [
-            UpdateBackendOrdersListener::class
+
+        RefundEventListsCreatedEvent::class => [
+            UpdateRefundedOrdersToBackendListener::class
+        ],
+
+        AmazonOrdersCreatedEvent::class => [
+            CreateAmazonOrdersToBackendListener::class
         ]
     ];
 

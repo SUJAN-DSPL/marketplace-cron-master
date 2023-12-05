@@ -14,6 +14,8 @@ if (!function_exists('tryCatch')) {
         try {
             $callBack();
         } catch (\Throwable $th) {
+            dump($th->getMessage());
+
             $errorMethod1 = $th->getTrace()[0]['function'] ?? 'N/A';
             $errorMethod2 = $th->getTrace()[1]['function'] ?? 'N/A';
             $errorMethod3 = $th->getTrace()[2]['function'] ?? 'N/A';
@@ -39,6 +41,8 @@ if (!function_exists('tryCatch')) {
                 Notification::route('mail', env("ADMIN_EMAIL"))->notify(new MailNotification($errorMessage));
             }
 
+            throw $th;
+        } catch (\Throwable $th) {
             $exception = $th;
         }
 

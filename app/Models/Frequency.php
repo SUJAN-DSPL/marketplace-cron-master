@@ -21,6 +21,7 @@ class Frequency extends Model
         'is_active' => 'boolean',
         'params_details' => 'array',
     ];
+
+    // * mutators
+
 }
-
-

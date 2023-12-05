@@ -1,3 +1,5 @@
+import { Label } from "@/Components/ui/label";
+import { Switch } from "@/Components/ui/switch";
 import {
     Table,
     TableBody,
@@ -12,14 +14,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PageProps, SchedulerReturnType } from "@/types";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { Link } from "@inertiajs/react";
 
 const Index = ({ auth }: PageProps) => {
     const schedulers = useQuery({
         queryKey: ["all-schedulers"],
         queryFn: async () => (await axios.get(route("all-schedulers"))).data,
     }) as UseQueryResult<Array<SchedulerReturnType>>;
-
-    console.log(schedulers.data);
 
     return (
         <AuthenticatedLayout user={auth.user} header={<p>Schedulers</p>}>
@@ -28,9 +30,9 @@ const Index = ({ auth }: PageProps) => {
                     <TableCaption>A list of your recent invoices.</TableCaption>
                     <TableHeader>
                         <TableRow>
-                            {/* <TableHead className="w-[100px]">Id</TableHead> */}
-                            <TableHead className="w-[100px]"> Name</TableHead>
-                            <TableHead>Timezone</TableHead>
+                            <TableHead className="w-[100px]">Action</TableHead>
+                            <TableHead className=""> Name</TableHead>
+                            <TableHead className="">Timezone</TableHead>
                             <TableHead className="">Frequency</TableHead>
                             <TableHead className="">Job</TableHead>
                             <TableHead className="text-right">
@@ -43,9 +45,16 @@ const Index = ({ auth }: PageProps) => {
                         {schedulers.data &&
                             schedulers.data.map((scheduler, index) => (
                                 <TableRow key={index}>
-                                    {/* <TableCell className="font-medium">
-                                        {scheduler.uuid}
-                                    </TableCell> */}
+                                    <TableCell className="font-medium  text-primary">
+                                        <Link
+                                            href={route(
+                                                "schedulers.show",
+                                                scheduler.uuid
+                                            )}
+                                        >
+                                            <RemoveRedEyeIcon fontSize="small" />
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>{scheduler.name}</TableCell>
                                     <TableCell>{scheduler.timezone}</TableCell>
                                     <TableCell className="">
@@ -55,7 +64,12 @@ const Index = ({ auth }: PageProps) => {
                                         {scheduler.cron_job_class}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {scheduler.is_active ? "true" : "false"}
+                                        <div className="flex items-center space-x-2 justify-end">
+                                            <Switch
+                                                id="airplane-mode"
+                                                checked={scheduler.is_active}
+                                            />
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}

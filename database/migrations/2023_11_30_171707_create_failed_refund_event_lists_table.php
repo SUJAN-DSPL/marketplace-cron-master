@@ -16,9 +16,7 @@ return new class extends Migration
             $table->id();
             $table->integer('refund_event_list_id');
             $table->foreign('refund_event_list_id')->references('id')->on('refund_event_lists');
-            $table->text("exception");
-            $table->string("exceptional_class");
-            $table->string("exceptional_method");
+            $table->json("exception");
             $table->timestamps();
         });
     }

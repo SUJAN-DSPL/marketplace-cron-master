@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             AllocationSeeder::class,
             CronStatusSeeder::class,
             CronTypeSeeder::class,
-            FrequencySeeder::class
+            FrequencySeeder::class,
+            MarketPlaceSeeder::class
         ]);
     }
 }

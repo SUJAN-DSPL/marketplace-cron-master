@@ -35,10 +35,22 @@ class RefundEventList extends Model
         return $this->belongsTo(AmazonOrder::class, 'amazon_order_id', 'amazon_order_id');
     }
 
+    public function failedRefundEventList()
+    {
+        return $this->hasMany(FailedRefundEventList::class,'refund_event_list_id');
+    }
+
     // * Accessors
 
     public function getPostedDateAttribute($value)
     {
         return Carbon::parse($value)->format('Y-m-d\TH:i:s\Z');
+    }
+
+    // * helpers 
+
+    public function addFailedEvent($exception)
+    {
+        return $this->failedRefundEventList()->create(['exception' => $exception]);
     }
 }
