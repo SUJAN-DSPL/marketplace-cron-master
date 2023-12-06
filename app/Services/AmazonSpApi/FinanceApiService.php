@@ -2,31 +2,15 @@
 
 namespace App\Services\AmazonSpApi;
 
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class FinanceApiService extends AuthApiService
 {
-    const FINANCIAL_EVENT_NAMES = [
-        "ShipmentEventList",
-
-        // "ShipmentSettleEventList",
-        // "ServiceFeeEventList",
-        // "AdjustmentEventList",
-        // "RemovalShipmentEventList",
-
-        "RefundEventList",
-        "RetrochargeEventList",
-        "RentalTransactionEventList",
-        "ServiceFeeEventList"
-    ];
-
     public function getFinancialEventsData(
         array $financialEventNames,
         string $postedAfter = null,
         string $postedBefore = null,
         string $nextToken = null
     ) {
-        $this->validateFinancialEventNames($financialEventNames);
 
         $response = $this->fetch()->withQueryParameters([
             'PostedAfter' => !$nextToken ? $postedAfter : null,
@@ -55,14 +39,5 @@ class FinanceApiService extends AuthApiService
         if ($response->getStatusCode() != 200) $this->throwAmazonError($response);
 
         return $response->json()['payload']["FinancialEvents"];
-    }
-
-    // * helpers methods 
-
-    public function validateFinancialEventNames(array $names): void
-    {
-        if (count(array_intersect(self::FINANCIAL_EVENT_NAMES, $names)) !== count($names)) {
-            throw new BadRequestException('Invalid Financial Event Name');
-        }
     }
 }
