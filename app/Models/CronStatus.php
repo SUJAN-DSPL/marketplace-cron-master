@@ -14,6 +14,11 @@ class CronStatus extends Model
     const COMPLETED = 3;
     const FAILED = 4;
 
+    const FINAL_STAGES = [
+        self::FAILED,
+        self::COMPLETED
+    ];
+
     protected $fillable = [
         'id',
         'label',

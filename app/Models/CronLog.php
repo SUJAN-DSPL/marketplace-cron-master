@@ -2,17 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CronLog extends Model
 {
     use HasFactory;
+    use HasUuids;
+
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'scheduler_id',
-        'ref_id',
         'started_at',
         'ended_at',
         'cron_status_id',
@@ -23,15 +28,6 @@ class CronLog extends Model
         'cron_status_id' => 'integer',
         'scheduler_id' => 'integer',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->ref_id = $model->ref_id ?? Str::uuid();
-        });
-    }
 
     // * Mutators
 
@@ -62,9 +58,9 @@ class CronLog extends Model
     public function saveLog(array $data)
     {
         $data = (object)$data;
-        $clone = $this->replicate();
-        $clone->cron_status_id = $data?->cron_status_id ?? $clone->cronStatus_id;
-        $clone->exception = $data?->exception ?? $clone->error;
-        $clone->save();
+        $this->cron_status_id = $data?->cron_status_id ?? $this->cron_status_id;
+        $this->exception = $data?->exception ?? $this->exception;
+        $this->ended_at = in_array($this->cron_status_id, CronStatus::FINAL_STAGES) ? Carbon::now() : null;
+        $this->save();
     }
 }

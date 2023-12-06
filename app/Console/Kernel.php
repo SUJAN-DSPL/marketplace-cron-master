@@ -5,6 +5,8 @@ namespace App\Console;
 use App\Jobs\TestCronJob;
 use App\Models\Scheduler;
 use Illuminate\Console\Scheduling\Schedule;
+use Spatie\Health\Commands\RunHealthChecksCommand;
+use Spatie\Health\Models\HealthCheckResultHistoryItem;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -24,10 +26,11 @@ class Kernel extends ConsoleKernel
                 $schedule->{$frequency->method}(...$params);
             }
 
-            $schedule->withoutOverlapping(120)->onOneServer();
+            // $schedule->withoutOverlapping(120)->onOneServer();
         });
 
-        // $schedule->job(new TestCronJob(Scheduler::first()))->everySecond()->withoutOverlapping(120)->onOneServer();
+        // $schedule->command('model:prune', ['--model' => [HealthCheckResultHistoryItem::class],])->everySecond();
+        // $schedule->command(RunHealthChecksCommand::class)->everyMinute();
     }
 
     /**

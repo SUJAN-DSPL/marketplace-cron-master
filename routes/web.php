@@ -1,13 +1,14 @@
 <?php
 
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\CronJobController;
 use App\Http\Controllers\CronLogController;
-use App\Http\Controllers\FrequencyController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FrequencyController;
 use App\Http\Controllers\SchedulerController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use Spatie\Health\Http\Controllers\HealthCheckResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("frequencies", [FrequencyController::class, 'getFrequencies'])->name("frequencies");
 
     Route::resource('cron-logs', CronLogController::class);
+
+    Route::get('health', HealthCheckResultsController::class);
 });
 
 
