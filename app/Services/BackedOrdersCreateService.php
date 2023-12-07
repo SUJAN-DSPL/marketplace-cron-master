@@ -13,7 +13,7 @@ class BackedOrdersCreateService
     {
         $amazonOrders->each(function (MpOrderMaster $amazonOrder) {
 
-            if (OrderMaster::query()->where('transaction_id', $amazonOrder[])->exists()) return;
+            // if (OrderMaster::query()->where('transaction_id', $amazonOrder->)->exists()) return;
 
             DB::transaction(function () use ($amazonOrder) {
                 $newOrder = $this->createOrder($amazonOrder);
@@ -33,10 +33,15 @@ class BackedOrdersCreateService
             $amazonOrder->toArray(),
             $amazonOrder->order_master_details,
             $amazonOrder->address_details,
-            $amazonOrder->vat_details
+            $amazonOrder->vat_details,
+            $amazonOrder->refunds_details
         );
 
-        return  OrderMaster::query()->create($data);
+        unset($data['id']);
+
+        $order = OrderMaster::query()->create($data);
+       
+        return $order;
     }
 
     public function createOrderDetails(OrderMaster $orderMaster,  $amazonOrderDetails)
