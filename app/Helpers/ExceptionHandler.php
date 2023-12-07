@@ -1,9 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use App\Notifications\MailNotification;
-use App\Notifications\SlackNotification;
-use Illuminate\Support\Facades\Notification;
 
 if (!function_exists('tryCatch')) {
 
@@ -14,8 +11,6 @@ if (!function_exists('tryCatch')) {
         try {
             $callBack();
         } catch (\Throwable $th) {
-            dump($th->getMessage());
-
             $errorMethod1 = $th->getTrace()[0]['function'] ?? 'N/A';
             $errorMethod2 = $th->getTrace()[1]['function'] ?? 'N/A';
             $errorMethod3 = $th->getTrace()[2]['function'] ?? 'N/A';
@@ -33,16 +28,10 @@ if (!function_exists('tryCatch')) {
             Type : $type \n
             Timestamp : $timestamp";
 
-            if (in_array("slack", $errorNotifyChannels)) {
-                Notification::route('slack', env('SLACK_WEBHOOK_URL'))->notify(new SlackNotification($errorMessage));
-            }
+            if (in_array("slack", $errorNotifyChannels)) notifyOnSlack($errorMessage);
 
-            if (in_array("mail", $errorNotifyChannels)) {
-                Notification::route('mail', env("ADMIN_EMAIL"))->notify(new MailNotification($errorMessage));
-            }
+            if (in_array("mail", $errorNotifyChannels)) notifyOnMail(env("ADMIN_EMAIL"), $errorMessage);
 
-            throw $th;
-        } catch (\Throwable $th) {
             $exception = $th;
         }
 

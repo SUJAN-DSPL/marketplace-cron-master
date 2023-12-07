@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\CronStatus;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateCronLogsTable extends Migration
 {
@@ -17,8 +17,7 @@ class CreateCronLogsTable extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('cron_logs', function (Blueprint $table) {
-            $table->id();
-            $table->tinyText('ref_id');
+            $table->uuid();
             $table->foreignUuid('scheduler_id')->references('uuid')->on('schedulers');
             $table->timestamp('started_at')->useCurrent();
             $table->timestamp('ended_at')->nullable();

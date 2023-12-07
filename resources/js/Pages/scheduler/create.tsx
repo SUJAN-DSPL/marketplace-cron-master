@@ -169,37 +169,43 @@ const Create = ({ auth }: PageProps) => {
                             <Label htmlFor="frequencies">
                                 Frequency (next run time: 2.10AM)
                             </Label>
-                            <Select
-                                defaultValue={`${data.frequencies?.[0].frequency_id}`}
-                                onValueChange={(value) =>
-                                    setData("frequencies", [
-                                        {
-                                            frequency_id: parseInt(value),
-                                            frequency_params: [],
-                                        },
-                                    ])
-                                }
-                            >
-                                <SelectTrigger
-                                    id="frequencies"
-                                    className="line-clamp-1  truncate"
+
+                            <div>
+                                <Select
+                                    defaultValue={`${data.frequencies?.[0].frequency_id}`}
+                                    onValueChange={(value) =>
+                                        setData("frequencies", [
+                                            {
+                                                frequency_id: parseInt(value),
+                                                frequency_params: [],
+                                            },
+                                        ])
+                                    }
                                 >
-                                    <SelectValue placeholder="Select the  frequency" />
-                                </SelectTrigger>
-                                <SelectContent className=" h-[30vh]">
-                                    {frequencies.data &&
-                                        frequencies.data.map(
-                                            (frequency, index) => (
-                                                <SelectItem
-                                                    key={index}
-                                                    value={`${frequency.id}`}
-                                                >
-                                                    {frequency.label}
-                                                </SelectItem>
-                                            )
-                                        )}
-                                </SelectContent>
-                            </Select>
+                                    <SelectTrigger
+                                        id="frequencies"
+                                        className="line-clamp-1  truncate"
+                                    >
+                                        <SelectValue placeholder="Select the  frequency" />
+                                    </SelectTrigger>
+                                    <SelectContent className=" h-[30vh]">
+                                        {frequencies.data &&
+                                            frequencies.data.map(
+                                                (frequency, index) => (
+                                                    <SelectItem
+                                                        key={index}
+                                                        value={`${frequency.id}`}
+                                                    >
+                                                        {frequency.label}
+                                                    </SelectItem>
+                                                )
+                                            )}
+                                    </SelectContent>
+                                </Select>
+
+                                
+                            </div>
+
                             <Error
                                 position="right"
                                 message={errors.frequencies}
@@ -264,7 +270,7 @@ const Create = ({ auth }: PageProps) => {
                                     />
 
                                     <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                                             Notify on Slack
+                                        Notify on Slack
                                     </span>
                                 </label>
                             </div>
