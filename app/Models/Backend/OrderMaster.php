@@ -2,13 +2,14 @@
 
 namespace App\Models\Backend;
 
-use Carbon\Carbon;
+use App\Traits\ModelHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderMaster extends Model
 {
     use HasFactory;
+    use ModelHelper;
 
     const REFUND_STATUS_ID = 12;
     const REFUND_BY_AMAZON_ID = 201;
@@ -18,28 +19,18 @@ class OrderMaster extends Model
     protected $table = 'order_master';
     public $timestamps = false;
 
-    protected $fillable = [];
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->fillable = $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
-    }
-
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($model) {
-           $model->fix_dilivery_date = Carbon::now();
-           $model->barcode_expiry = Carbon::now();
-           $model->barcode_expiry = Carbon::now();
-           $model->billpay_due_date= Carbon::now();
-           $model->boleto_expiry_date = Carbon::now();
-           $model->date_of_birth = Carbon::now();
-           $model->claim_status = 0;
-           $model->special_offer_order = 0;
+            $model->fix_dilivery_date = self::parseOrDefaultTimeStamp($model,'fix_dilivery_date');
+            $model->barcode_expiry = self::parseOrDefaultTimeStamp($model,'barcode_expiry');
+            $model->billpay_due_date = self::parseOrDefaultTimeStamp($model,'billpay_due_date');
+            $model->boleto_expiry_date = self::parseOrDefaultTimeStamp($model,'boleto_expiry_date');
+            $model->date_of_birth = self::parseOrDefaultTimeStamp($model,'date_of_birth');
+            $model->claim_status = 0;
+            $model->special_offer_order = 0;
         });
     }
 

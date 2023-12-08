@@ -15,9 +15,7 @@ class OrderSyncToBackendJob extends CronJob
 
 	public function execute()
 	{
-		$amazonOrders = OrderMaster::query()
-			->withoutSynchronizedOrder()->take(self::MAX_ORDER)->get();
-
+		$amazonOrders = OrderMaster::query()->withoutSynchronizedOrder()->take(self::MAX_ORDER)->get();
 		(new BackedOrdersCreateService())->createOrders($amazonOrders);
 	}
 }

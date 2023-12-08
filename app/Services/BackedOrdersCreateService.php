@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Backend\OrderMaster;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Amazon\Orders\OrderMaster as MpOrderMaster;
+use Carbon\Carbon;
 
 class BackedOrdersCreateService
 {
@@ -13,7 +14,7 @@ class BackedOrdersCreateService
     {
         $amazonOrders->each(function (MpOrderMaster $amazonOrder) {
 
-            // if (OrderMaster::query()->where('transaction_id', $amazonOrder->)->exists()) return;
+            if (OrderMaster::query()->where('order_id', $amazonOrder->order_id)->exists()) return;
 
             DB::transaction(function () use ($amazonOrder) {
                 $newOrder = $this->createOrder($amazonOrder);
@@ -40,7 +41,7 @@ class BackedOrdersCreateService
         unset($data['id']);
 
         $order = OrderMaster::query()->create($data);
-       
+
         return $order;
     }
 
