@@ -10,6 +10,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.3",
         "laravel/framework": "^10.33",
+        "laravel/pulse": "^1.0@beta",
         "laravel/sanctum": "^3.2",
         "laravel/slack-notification-channel": "^3.1",
         "laravel/tinker": "^2.8",
@@ -72,6 +73,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "prefer-stable": true
 }
