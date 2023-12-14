@@ -27,8 +27,8 @@ export type SchedulerFromInputsType = {
     notify_on_slack: boolean;
 };
 
-export type SchedulerReturnType = {
-    uuid: string
+export type SchedulerType = {
+    uuid: string;
     name: string;
     description: string;
     is_active: boolean;
@@ -47,4 +47,37 @@ export type SchedulerReturnType = {
     timezone: string;
     notifiable_emails: Array<string>;
     notify_on_slack: boolean;
+};
+
+export type CronLogType = {
+    uuid: string;
+    scheduler_id: number;
+    started_at: string;
+    ended_at: string;
+    cron_status_id: number;
+    exception?: {
+        message: string;
+        trace: string;
+    };
+    created_at: string;
+    updated_at: string;
+    status: {
+        id: number;
+        color: string;
+        label: "Draft" | "Running" | "Completed" | "Failed";
+        description: string;
+    };
+    scheduler: {
+        uuid: string;
+        name: string;
+        description: string;
+        is_active: boolean;
+        cron_job_class: string;
+        timezone: string;
+        notifiable_emails: Array<string>;
+        notify_on_slack: boolean;
+        deleted_at: string;
+        created_at: string;
+        updated_at: string;
+    };
 };

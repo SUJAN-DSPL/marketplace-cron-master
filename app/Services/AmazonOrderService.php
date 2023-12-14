@@ -20,9 +20,9 @@ class AmazonOrderService
         DB::table('amazon_orders')->upsert($orders, 'amazon_order_id');
     }
 
-    public function getLasCreateOrder(): AmazonOrder|null
+    public function getLasUpdatedOrder(): AmazonOrder|null
     {
-        return self::MODEL::query()->orderBy('purchase_date', 'desc')->first();
+        return self::MODEL::query()->orderBy('last_update_date', 'desc')->first();
     }
 
     public function getOrdersBetween(array $purchaseDateRange)

@@ -2,7 +2,7 @@ import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export type FrequencyType = {
-    id: string,
+    id: number,
     label: string;
     method: string;
     param_details: Array<{

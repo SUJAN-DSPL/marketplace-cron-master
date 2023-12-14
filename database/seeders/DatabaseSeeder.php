@@ -14,9 +14,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            AllocationSeeder::class,
+            // AllocationSeeder::class,
             CronStatusSeeder::class,
-            CronTypeSeeder::class,
+            // CronTypeSeeder::class,
             FrequencySeeder::class,
             MarketPlaceSeeder::class
         ]);

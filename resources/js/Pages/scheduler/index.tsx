@@ -11,17 +11,22 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { PageProps, SchedulerReturnType } from "@/types";
+import { PageProps, SchedulerType } from "@/types";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 
 const Index = ({ auth }: PageProps) => {
     const schedulers = useQuery({
         queryKey: ["all-schedulers"],
         queryFn: async () => (await axios.get(route("all-schedulers"))).data,
-    }) as UseQueryResult<Array<SchedulerReturnType>>;
+    }) as UseQueryResult<Array<SchedulerType>>;
+
+    const toggleActive = async (scheduleId: string) => {
+        router.get(route("schedulers.toggle-active", scheduleId));
+        schedulers.refetch();
+    };
 
     return (
         <AuthenticatedLayout user={auth.user} header={<p>Schedulers</p>}>
@@ -48,7 +53,7 @@ const Index = ({ auth }: PageProps) => {
                                     <TableCell className="font-medium  text-primary">
                                         <Link
                                             href={route(
-                                                "schedulers.show",
+                                                "schedulers.edit",
                                                 scheduler.uuid
                                             )}
                                         >
@@ -68,21 +73,15 @@ const Index = ({ auth }: PageProps) => {
                                             <Switch
                                                 id="airplane-mode"
                                                 checked={scheduler.is_active}
+                                                onClick={() =>
+                                                    toggleActive(scheduler.uuid)
+                                                }
                                             />
                                         </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
                     </TableBody>
-
-                    {/* <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={3}>Total</TableCell>
-                            <TableCell className="text-right">
-                                $2,500.00
-                            </TableCell>
-                        </TableRow>
-                    </TableFooter> */}
                 </Table>
             </div>
         </AuthenticatedLayout>

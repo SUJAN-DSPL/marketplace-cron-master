@@ -26,4 +26,20 @@ class SchedulerService
 
         return $this->scheduler;
     }
+
+    public function update(array $data): Scheduler
+    {
+        $this->scheduler->update([
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'timezone' => $data['timezone'],
+            'notifiable_emails' => $data['notifiable_emails'],
+            'notify_on_slack' => $data['notify_on_slack'],
+            'is_active' => $data['is_active']
+        ]);
+
+        $this->scheduler->refresh();
+
+        return $this->scheduler;
+    }
 }

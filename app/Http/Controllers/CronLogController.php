@@ -63,4 +63,9 @@ class CronLogController extends Controller
     {
         //
     }
+
+    public function getLogs()
+    {
+        return response()->json(CronLog::query()->latest()->take(10)->orderBy('updated_at', 'desc')->with(['status','scheduler'])->get());
+    }
 }

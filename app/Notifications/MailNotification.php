@@ -14,7 +14,7 @@ class MailNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public $message)
+    public function __construct(public $subject, public $message)
     {
         //
     }
@@ -34,10 +34,7 @@ class MailNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->subject(" Message from " . config("app.name"))
-            ->greeting('Hello Admin')
-            ->line($this->message);
+        return (new MailMessage)->subject($this->subject)->greeting('Hello ,')->line($this->message);
     }
 
     /**

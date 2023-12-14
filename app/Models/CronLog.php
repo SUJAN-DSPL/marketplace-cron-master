@@ -26,7 +26,7 @@ class CronLog extends Model
 
     protected $casts = [
         'cron_status_id' => 'integer',
-        'scheduler_id' => 'integer',
+        'exception' => 'array'
     ];
 
     // * Mutators
@@ -45,7 +45,7 @@ class CronLog extends Model
 
     public function scheduler()
     {
-        return $this->belongsTo(Scheduler::class);
+        return $this->belongsTo(Scheduler::class, 'scheduler_id', 'uuid');
     }
 
     public function status()

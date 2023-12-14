@@ -61,13 +61,17 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            'modes' => [
+                // 'strict' => true,
+                'sql_mode' => 'NO_ZERO_DATE,NO_ZERO_IN_DATE',
+            ],
         ],
 
         'backend_mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('BACKEND_DB_HOST', '127.0.0.1'),
+            'port' => env('BACKEND_DB_PORT', '3306'),
             'database' => env('BACKEND_DB_DATABASE', 'forge'),
             'username' => env('BACKEND_DB_USERNAME', 'forge'),
             'password' => env('Backend_DB_PASSWORD', ''),
@@ -81,6 +85,10 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            'modes' => [
+                // 'strict' => true,
+                'sql_mode' => 'NO_ZERO_DATE,NO_ZERO_IN_DATE',
+            ],
         ],
 
         'pgsql' => [

@@ -16,28 +16,32 @@ class CronStatusSeeder extends Seeder
         $statuses = [
             [
                 'id' => 1,
-                'label' => 'draft',
+                'label' => 'Draft',
+                'color' => '#9ca3af',
                 'description' => 'Previous cron still running',
             ],
             [
                 'id' => 2,
                 'label' => 'Running',
+                'color' => '#6d28d9',
                 'description' => 'Cron is running',
             ],
             [
                 'id' => 3,
                 'label' => 'Completed',
+                'color' => '#4ade80',
                 'description' => 'Cron has been Completed'
             ],
             [
                 'id' => 4,
                 'label' => 'Failed',
+                'color' => "#f87171",
                 'description' => 'Cron has been Failed'
             ]
         ];
 
         foreach ($statuses as $status) {
-            CronStatus::query()->updateOrCreate($status, ['id' => $status['id']]);
+            CronStatus::query()->updateOrCreate(['id' => $status['id']], $status);
         }
     }
 }

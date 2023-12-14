@@ -29,112 +29,112 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Every Second',
                 'method' => 'everySecond',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every second"
             ],
             [
                 'label' => 'Every Two Seconds',
                 'method' => 'everyTwoSeconds',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every two seconds"
             ],
             [
                 'label' => 'Every Five Seconds',
                 'method' => 'everyFiveSeconds',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every five seconds"
             ],
             [
                 'label' => 'Every Ten Seconds',
                 'method' => 'everyTenSeconds',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every ten seconds"
             ],
             [
                 'label' => 'Every Fifteen Seconds',
                 'method' => 'everyFifteenSeconds',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every fifteen seconds"
             ],
             [
                 'label' => 'Every Twenty Seconds',
                 'method' => 'everyTwentySeconds',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every twenty seconds"
             ],
             [
                 'label' => 'Every Thirty Seconds',
                 'method' => 'everyThirtySeconds',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every thirty seconds"
             ],
             [
                 'label' => 'Every Minute',
                 'method' => 'everyMinute',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every minute"
             ],
             [
                 'label' => 'Every Two Minutes',
                 'method' => 'everyTwoMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every two minutes"
             ],
             [
                 'label' => 'Every Three Minutes',
                 'method' => 'everyThreeMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every three minutes"
             ],
             [
                 'label' => 'Every Four Minutes',
                 'method' => 'everyFourMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every four minutes"
             ],
             [
                 'label' => 'Every Five Minutes',
                 'method' => 'everyFiveMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every five minutes"
             ],
             [
                 'label' => 'Every Ten Minutes',
                 'method' => 'everyTenMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every ten minutes"
             ],
             [
                 'label' => 'Every Fifteen Minutes',
                 'method' => 'everyFifteenMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every fifteen minutes"
             ],
             [
                 'label' => 'Every Thirty Minutes',
                 'method' => 'everyThirtyMinutes',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every thirty minutes"
             ],
             [
                 'label' => 'Hourly',
                 'method' => 'hourly',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every hour"
             ],
@@ -219,7 +219,7 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Daily',
                 'method' => 'daily',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every day at midnight"
             ],
@@ -275,7 +275,7 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Weekly',
                 'method' => 'weekly',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task every Sunday at midnight"
             ],
@@ -300,7 +300,7 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Monthly',
                 'method' => 'monthly',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task on the first day of every month at midnight"
             ],
@@ -361,7 +361,7 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Quarterly',
                 'method' => 'quarterly',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task on the first day of every quarter at midnight"
             ],
@@ -386,7 +386,7 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Yearly',
                 'method' => 'yearly',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => "Run the task on the first day of every year at midnight"
             ],
@@ -417,63 +417,63 @@ class FrequencySeeder extends Seeder
             [
                 'label' => 'Limit to Weekdays',
                 'method' => 'weekdays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to weekdays'
             ],
             [
                 'label' => 'Limit to Weekends',
                 'method' => 'weekends',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to weekends'
             ],
             [
                 'label' => 'Limit to Sunday',
                 'method' => 'sundays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Sunday'
             ],
             [
                 'label' => 'Limit to Monday',
                 'method' => 'mondays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Monday'
             ],
             [
                 'label' => 'Limit to Tuesday',
                 'method' => 'tuesdays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Tuesday'
             ],
             [
                 'label' => 'Limit to Wednesday',
                 'method' => 'wednesdays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Wednesday'
             ],
             [
                 'label' => 'Limit to Thursday',
                 'method' => 'thursdays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Thursday'
             ],
             [
                 'label' => 'Limit to Friday',
                 'method' => 'fridays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Friday'
             ],
             [
                 'label' => 'Limit to Saturday',
                 'method' => 'saturdays',
-                'params_details' => null,
+                'params_details' => [],
                 'is_active' => true,
                 'description' => 'Limit the task to Saturday'
             ],

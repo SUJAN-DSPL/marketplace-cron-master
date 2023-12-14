@@ -23,15 +23,20 @@ class SchedulerCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
+            'name' => ['unique:schedulers,name','required', 'string'],
             'description' => ['required', 'string'],
             'is_active' => ['required', 'boolean'],
             'timezone' => ['required', 'string'],
             'cron_job_class' => ['required', 'string'],
             'frequencies' => ['array', 'required'],
-            'frequencies.*.frequency_id' => ['numeric', 'required'],
+            'frequencies.*.frequency_id' => ['numeric', 'required',function(){
+                
+            }],
             'frequencies.*.frequency_params' => ['array', 'nullable'],
             'frequencies.*.frequency_params.*' => ['numeric', 'required'],
+            'notifiable_emails' => ['array', 'nullable'],
+            'notifiable_emails.*' => ['email', 'string'],
+            'notify_on_slack' => ['boolean']
         ];
     }
 }
