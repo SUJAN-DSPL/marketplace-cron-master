@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Amazon;
+namespace App\Models\Backend;
 
 use Illuminate\Database\Eloquent\Model;
 
 final class AmazonShippingRule extends Model
 {
-    protected $connection = 'live_site';
+    protected $connection = 'backend_mysql';
 
     public $timestamps = false;
 

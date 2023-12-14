@@ -70,8 +70,8 @@ return [
         'backend_mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('BACKEND_DB_HOST', '127.0.0.1'),
+            'port' => env('BACKEND_DB_PORT', '3306'),
             'database' => env('BACKEND_DB_DATABASE', 'forge'),
             'username' => env('BACKEND_DB_USERNAME', 'forge'),
             'password' => env('Backend_DB_PASSWORD', ''),

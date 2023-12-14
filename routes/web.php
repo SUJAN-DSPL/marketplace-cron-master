@@ -35,16 +35,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('schedulers', SchedulerController::class);
-    Route::get('/all-schedulers', [SchedulerController::class,'getSchedulers'])->name("all-schedulers");
+    Route::get('/all-schedulers', [SchedulerController::class, 'getSchedulers'])->name("all-schedulers");
     Route::get('/timezones', [SchedulerController::class, 'getTimezones'])->name("timezones");
     Route::get('/cron-jobs', [SchedulerController::class, 'getCronJobs'])->name("cron-jobs");
+    Route::get("schedulers/toggle-active/{scheduler}", [SchedulerController::class, 'toggleActive'])
+        ->name("schedulers.toggle-active");
 
-    Route::resource('frequencies',FrequencyController::class);
+    Route::resource('frequencies', FrequencyController::class);
     Route::get("frequencies", [FrequencyController::class, 'getFrequencies'])->name("frequencies");
 
-    Route::resource('cron-logs', CronLogController::class);
+    Route::get('cron-logs', [CronLogController::class, 'index'])->name("cron-logs.index");
+    Route::get('cron-logs/logs', [CronLogController::class, 'getLogs'])->name('cron-logs.logs');
 
-    Route::get('health', HealthCheckResultsController::class);
+    // Route::get('health', HealthCheckResultsController::class);
 });
 
 

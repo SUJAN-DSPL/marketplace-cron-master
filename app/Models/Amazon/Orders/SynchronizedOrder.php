@@ -10,6 +10,6 @@ class SynchronizedOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'order_id'
+        'amazon_order_id'
     ];
 }

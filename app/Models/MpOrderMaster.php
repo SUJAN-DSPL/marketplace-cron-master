@@ -1,15 +1,33 @@
 <?php
 
-namespace App\Models\Amazon\Orders;
+namespace App\Models;
 
+use App\Models\Backend\OrderRef;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-final class OrderMaster extends Model
+final class MpOrderMaster extends Model
 {
     public $timestamps = false;
 
     protected $table = 'mp_order_masters';
+
+    const DATE_OF_BIRTH = "1988-01-01";
+
+    const EMAIL_ARRAY = [
+        '168' => 'yJOX8I+6W6O9xa6NWWjpLoBhYpYU55RLWaNiR06ncRQ=',
+        '169' => '045MyohqINNDFu1YGjqgFIItH+D0WHXj48PdppYVPY4=',
+        '170' => 'eSCNqXZ4qTRExkDEsd5ylYb84KchGNVJ8G6XntPeZ4I=',
+        '179' => 'JMpT1QGTBw9zTWyE6NPxNaZpiWpJ3JJz5kjBWXMleD4=',
+        '202' => '/IeEMrxrdG177dyY1S3wW9LZRl9najCRKbOJhK8+s4Q=',
+        '240' => 'XSXeILjf4kVrQvVu2T0NsWWyIo4DfVX2OYLlPILggM4=',
+        '241' => 'Q0Y2Rwv+J3b09m3oqRLkEuBm0VU49bFhEh6U19PeyPY=',
+        '242' => 'rCtAJBzcFGRUrK21kOVOb0d0oyWWwk0ww54oQISbciU=',
+        '243' => 'qNB7dhNbz1duqA2USIm3UsOuTqbjLhtlHQ/YFam5wEQ=',
+        '253' => 'PS+9PlBYuGMcIhRvA+gALr783oTmG3T/dzZxqsuWKf0=',
+        '254' => 'FnQUZQzBxqlLXAeuFH7anYneUcJenL7Unq3qbqm8cck=',
+        '255' => 'h/bfXOG+fKMDoHN+UZCM3tW8FrOAcwEDDwzhEIsXq2U='
+    ];
 
     protected $fillable = [
         'order_id',
@@ -48,24 +66,12 @@ final class OrderMaster extends Model
         'address_details' => 'json',
     ];
 
-    // * scopes
-
-    public function scopeWithoutSynchronizedOrder($query)
-    {
-        $query->doesnthave('synchronizedOrder');
-    }
-
     // * Relations 
-
-    public function synchronizedOrder()
-    {
-        return $this->hasOne(SynchronizedOrder::class, 'order_id', 'order_id');
-    }
 
     public function orderDetails(): HasMany
     {
         return $this->hasMany(
-            related: OrderDetail::class,
+            related: MpOrderDetail::class,
             foreignKey: 'order_id',
             localKey: 'order_id'
         );
@@ -74,9 +80,22 @@ final class OrderMaster extends Model
     public function orderProcessing(): HasMany
     {
         return $this->hasMany(
-            related: OrderProcessing::class,
+            related: MpOrderProcessing::class,
             foreignKey: 'order_id',
             localKey: 'order_id'
         );
+    }
+
+    // * helper methods
+
+    public static function generateNewOrderNo(): string
+    {
+        $domainPrefix = '44';
+
+        $orderRef = OrderRef::create([
+            'ref_id' => OrderRef::count() + 1,
+        ]);
+
+        return $domainPrefix . $orderRef->ref_id;
     }
 }

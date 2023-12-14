@@ -13,8 +13,6 @@
         "laravel/sanctum": "^3.2",
         "laravel/slack-notification-channel": "^3.1",
         "laravel/tinker": "^2.8",
-        "spatie/cpu-load-health-check": "^1.0",
-        "spatie/laravel-health": "^1.23",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
@@ -34,7 +32,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "files": ["app/Helpers/ExceptionHandler.php","app/Helpers/NotificationHandler.php"]
+        "files": ["app/Helpers/ExceptionHandler.php","app/Helpers/NotificationHandler.php","app/Helpers/GeneralHelper.php"]
     },
     "autoload-dev": {
         "psr-4": {

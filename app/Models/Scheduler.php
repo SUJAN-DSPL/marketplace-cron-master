@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use DateTimeZone;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -64,7 +63,7 @@ class Scheduler extends Model
     public function addFrequencies(array $frequencies): void
     {
         array_walk($frequencies, function ($frequency) {
-            $this->frequencies()->attach(
+            $this->frequencies()->sync(
                 $frequency['frequency_id'],
                 ['frequency_params' => json_encode($frequency['frequency_params'])]
             );
@@ -77,5 +76,10 @@ class Scheduler extends Model
             'started_at' => Carbon::now(),
             'cron_status_id' => $statusId
         ]);
+    }
+
+    public function toggleActive()
+    {
+        $this->update(['is_active' => !$this->is_active]);
     }
 }

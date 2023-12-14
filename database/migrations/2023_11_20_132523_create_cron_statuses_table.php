@@ -20,6 +20,7 @@ class CreateCronStatusesTable extends Migration
         Schema::create('cron_statuses', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->string('label');
+            $table->string('color');
             $table->tinyText('description')->nullable();
             $table->timestamps();
         });

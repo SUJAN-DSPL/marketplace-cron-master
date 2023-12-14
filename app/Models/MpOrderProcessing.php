@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Amazon\Orders;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-final class OrderProcessing extends Model
+final class MpOrderProcessing extends Model
 {
     public $timestamps = false;
 
@@ -40,7 +40,7 @@ final class OrderProcessing extends Model
     public function orderMaster(): BelongsTo
     {
         return $this->belongsTo(
-            related: OrderMaster::class,
+            related: MpOrderMaster::class,
             foreignKey: 'order_id',
             ownerKey: 'order_id',
             relation: 'orderProcessing'

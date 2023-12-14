@@ -2,11 +2,8 @@
 
 namespace App\Console;
 
-use App\Jobs\TestCronJob;
 use App\Models\Scheduler;
 use Illuminate\Console\Scheduling\Schedule;
-use Spatie\Health\Commands\RunHealthChecksCommand;
-use Spatie\Health\Models\HealthCheckResultHistoryItem;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -22,15 +19,12 @@ class Kernel extends ConsoleKernel
             $schedule =  $schedule->job(new $className($scheduler));
 
             foreach ($scheduler->frequencies as $frequency) {
-                $params = json_decode($frequency->pivot->frequency_params);
+                $params = json_decode($frequency->pivot->frequency_params) ?? [];
                 $schedule->{$frequency->method}(...$params);
             }
 
-            // $schedule->withoutOverlapping(120)->onOneServer();
+            $schedule->withoutOverlapping(10)->onOneServer();
         });
-
-        // $schedule->command('model:prune', ['--model' => [HealthCheckResultHistoryItem::class],])->everySecond();
-        // $schedule->command(RunHealthChecksCommand::class)->everyMinute();
     }
 
     /**

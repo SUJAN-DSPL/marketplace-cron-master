@@ -1,10 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {
-    PageProps,
-    SchedulerFromInputsType,
-    SchedulerReturnType,
-} from "@/types";
-import { Button } from "@/Components/ui/button";
+import { PageProps, SchedulerFromInputsType, SchedulerType } from "@/types";
+
 import {
     Card,
     CardContent,
@@ -31,47 +27,45 @@ import { FormEventHandler, useEffect } from "react";
 import Error from "@/Components/ui/error";
 import useToastMessage from "@/Components/hooks/use-toast-message";
 
-const Show = ({
-    auth,
-    scheduler,
-}: PageProps<{ scheduler: SchedulerReturnType }>) => {
+const Edit = ({ auth, scheduler }: PageProps<{ scheduler: SchedulerType }>) => {
     const { timezones, frequencies, cronJobs } = useScheduler();
     const [setToasterMessage] = useToastMessage();
 
     const {
         data,
         setData,
-        post,
+        patch,
         processing,
         errors,
         reset,
         recentlySuccessful,
     } = useForm<SchedulerFromInputsType>({
-        name: "",
-        description: "",
-        is_active: false,
-        cron_job_class: "",
-        frequencies: [{ frequency_id: 2, frequency_params: [] }],
-        timezone: "Asia/Kolkata",
-        notifiable_emails: [],
-        notify_on_slack: false,
+        name: scheduler.name,
+        description: scheduler.description,
+        is_active: scheduler.is_active,
+        cron_job_class: scheduler.cron_job_class,
+        frequencies: [
+            { frequency_id: scheduler.frequencies[0].id, frequency_params: [] },
+        ],
+        timezone: scheduler.timezone,
+        notifiable_emails: scheduler.notifiable_emails,
+        notify_on_slack: scheduler.notify_on_slack,
     });
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route("schedulers.store"));
+        patch(route("schedulers.update", scheduler.uuid), {
+            preserveScroll: true,
+        });
     };
 
     useEffect(() => {
         if (!recentlySuccessful) return;
-        setToasterMessage({ success: "Scheduler has been saved successfully" });
-        return () => {
-            reset();
-        };
+        setToasterMessage({ success: "Scheduler has been Updated successfully" });
     }, [recentlySuccessful]);
 
     return (
-        <AuthenticatedLayout user={auth.user} header={<p>/Scheduler/Update</p>}>
+        <AuthenticatedLayout user={auth.user} header={<p>/Scheduler/Edit</p>}>
             <Card>
                 <CardHeader>
                     <CardTitle>Create Your Scheduler</CardTitle>
@@ -79,6 +73,7 @@ const Show = ({
                         Create a new Scheduler for a particular Job
                     </CardDescription>
                 </CardHeader>
+
                 <form onSubmit={handleSubmit}>
                     <CardContent className="grid gap-6">
                         <div className="grid grid-cols-2 gap-4">
@@ -87,6 +82,7 @@ const Show = ({
                                 <Input
                                     id="name"
                                     placeholder="Enter a unique Name Of the scheduler"
+                                    value={data.name}
                                     onChange={(e) =>
                                         setData("name", e.target.value)
                                     }
@@ -99,12 +95,11 @@ const Show = ({
                                     Select the Job
                                 </Label>
                                 <Select
+                                    value={data.cron_job_class}
                                     onValueChange={(value) =>
-                                        setData(
-                                            "cron_job_class",
-                                            `App\\Jobs\\${value}`
-                                        )
+                                        setData("cron_job_class", value)
                                     }
+                                    disabled
                                 >
                                     <SelectTrigger
                                         id="cron_job_class"
@@ -117,7 +112,7 @@ const Show = ({
                                             cronJobs.data.map(
                                                 (cronjob, index) => (
                                                     <SelectItem
-                                                        value={cronjob}
+                                                        value={`App\\Jobs\\${cronjob}`}
                                                         key={index}
                                                     >
                                                         {cronjob}
@@ -140,7 +135,7 @@ const Show = ({
                                 </Label>
 
                                 <Select
-                                    defaultValue={data.timezone}
+                                    value={data.timezone}
                                     onValueChange={(value) =>
                                         setData("timezone", value)
                                     }
@@ -176,37 +171,41 @@ const Show = ({
                             <Label htmlFor="frequencies">
                                 Frequency (next run time: 2.10AM)
                             </Label>
-                            <Select
-                                defaultValue={`${data.frequencies?.[0].frequency_id}`}
-                                onValueChange={(value) =>
-                                    setData("frequencies", [
-                                        {
-                                            frequency_id: parseInt(value),
-                                            frequency_params: [],
-                                        },
-                                    ])
-                                }
-                            >
-                                <SelectTrigger
-                                    id="frequencies"
-                                    className="line-clamp-1  truncate"
+
+                            <div>
+                                <Select
+                                    value={`${data.frequencies?.[0].frequency_id}`}
+                                    onValueChange={(value) =>
+                                        setData("frequencies", [
+                                            {
+                                                frequency_id: parseInt(value),
+                                                frequency_params: [],
+                                            },
+                                        ])
+                                    }
                                 >
-                                    <SelectValue placeholder="Select the  frequency" />
-                                </SelectTrigger>
-                                <SelectContent className=" h-[30vh]">
-                                    {frequencies.data &&
-                                        frequencies.data.map(
-                                            (frequency, index) => (
-                                                <SelectItem
-                                                    key={index}
-                                                    value={`${frequency.id}`}
-                                                >
-                                                    {frequency.label}
-                                                </SelectItem>
-                                            )
-                                        )}
-                                </SelectContent>
-                            </Select>
+                                    <SelectTrigger
+                                        id="frequencies"
+                                        className="line-clamp-1  truncate"
+                                    >
+                                        <SelectValue placeholder="Select the  frequency" />
+                                    </SelectTrigger>
+                                    <SelectContent className=" h-[30vh]">
+                                        {frequencies.data &&
+                                            frequencies.data.map(
+                                                (frequency, index) => (
+                                                    <SelectItem
+                                                        key={index}
+                                                        value={`${frequency.id}`}
+                                                    >
+                                                        {frequency.label}
+                                                    </SelectItem>
+                                                )
+                                            )}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
                             <Error
                                 position="right"
                                 message={errors.frequencies}
@@ -219,7 +218,8 @@ const Show = ({
                             </Label>
                             <Input
                                 id="notifiable_emails"
-                                placeholder="enter your all emails by , separator"
+                                value={data.notifiable_emails.join(", ")}
+                                placeholder="enter multiple emails by comma separator"
                                 onChange={(e) =>
                                     setData(
                                         "notifiable_emails",
@@ -229,16 +229,27 @@ const Show = ({
                                     )
                                 }
                             />
-                            <Error
-                                position="right"
-                                message={errors.notifiable_emails}
-                            />
+                            {data.notifiable_emails.map((email, index) => {
+                                const notifyEmailsError = errors as any;
+                                return (
+                                    <Error
+                                        key={index}
+                                        position="right"
+                                        message={
+                                            notifyEmailsError?.[
+                                                `notifiable_emails.${index}`
+                                            ]
+                                        }
+                                    />
+                                );
+                            })}
                         </div>
 
                         <div className="grid gap-2">
                             <Label htmlFor="description">Description</Label>
                             <Textarea
                                 id="description"
+                                value={data.description}
                                 placeholder="Please include all information relevant to your issue."
                                 onChange={(e) =>
                                     setData("description", e.target.value)
@@ -271,7 +282,7 @@ const Show = ({
                                     />
 
                                     <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                                        On Success Notify on Slack
+                                        Notify on Slack
                                     </span>
                                 </label>
                             </div>
@@ -293,14 +304,14 @@ const Show = ({
                                         }
                                     />
                                     <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                                        Make it Active
+                                        Mark as Active
                                     </span>
                                 </label>
                             </div>
                         </div>
 
                         <SubmitButton isLoading={processing}>
-                            Submit
+                            Update
                         </SubmitButton>
                     </CardFooter>
                 </form>
@@ -309,4 +320,4 @@ const Show = ({
     );
 };
 
-export default Show;
+export default Edit;

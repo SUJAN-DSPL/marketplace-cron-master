@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Scheduler;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SchedulerUpdateRequest extends FormRequest
@@ -11,7 +14,7 @@ class SchedulerUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return !!Auth::user();
     }
 
     /**
@@ -22,7 +25,17 @@ class SchedulerUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+            'name' => ['required', 'string', Rule::unique(Scheduler::class, 'uuid')->ignore($this->scheduler->name, 'name')],
+            'description' => ['required', 'string'],
+            'is_active' => ['required', 'boolean'],
+            'timezone' => ['required', 'string'],
+            'frequencies' => ['array', 'required'],
+            'frequencies.*.frequency_id' => ['numeric', 'required'],
+            'frequencies.*.frequency_params' => ['array', 'nullable'],
+            'frequencies.*.frequency_params.*' => ['numeric', 'required'],
+            'notifiable_emails' => ['array', 'nullable'],
+            'notifiable_emails.*' => ['email', 'string'],
+            'notify_on_slack' => ['boolean']
         ];
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\Amazon\Orders;
+namespace App\Models;
 
+use App\Services\MpOrderMasterService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-final class OrderDetail extends Model
+final class MpOrderDetail extends Model
 {
     public $timestamps = false;
 
@@ -28,10 +29,23 @@ final class OrderDetail extends Model
         'order_details' => 'json',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            (new MpOrderMasterService($model->orderMaster))->updateCostPriceTotal();
+        });
+
+        static::updated(function ($model) {
+            (new MpOrderMasterService($model->orderMaster))->updateCostPriceTotal();
+        });
+    }
+
     public function orderMaster(): BelongsTo
     {
         return $this->belongsTo(
-            related: OrderMaster::class,
+            related: MpOrderMaster::class,
             foreignKey: 'order_id',
             ownerKey: 'order_id',
             relation: 'orderDetails'

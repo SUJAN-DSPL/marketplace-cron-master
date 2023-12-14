@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\SchedulerCreateRequest;
-
+use App\Http\Requests\SchedulerUpdateRequest;
 
 class SchedulerController extends Controller
 {
@@ -48,7 +48,6 @@ class SchedulerController extends Controller
      */
     public function show(Scheduler $scheduler)
     {
-        return Inertia::render('scheduler/show', ['scheduler' => $scheduler]);
     }
 
     /**
@@ -56,15 +55,20 @@ class SchedulerController extends Controller
      */
     public function edit(Scheduler $scheduler)
     {
-        //
+        $scheduler->frequencies;
+        return Inertia::render('scheduler/edit', ['scheduler' => $scheduler]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Scheduler $scheduler)
+    public function update(SchedulerUpdateRequest $request, Scheduler $scheduler)
     {
-        //
+        $schedulerService = new SchedulerService($scheduler);
+        $scheduler = $schedulerService->update($request->all());
+        $scheduler->addFrequencies($request->get("frequencies"));
+
+        return Redirect::route('schedulers.edit', $scheduler->uuid);
     }
 
     /**
@@ -73,6 +77,11 @@ class SchedulerController extends Controller
     public function destroy(Scheduler $scheduler)
     {
         //
+    }
+
+    public function toggleActive(Scheduler $scheduler)
+    {
+        $scheduler->toggleActive();
     }
 
     public function getCronJobs()

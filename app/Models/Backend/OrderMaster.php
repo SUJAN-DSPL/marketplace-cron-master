@@ -2,6 +2,8 @@
 
 namespace App\Models\Backend;
 
+use App\Models\MpOrderDetail;
+use App\Models\MpOrderProcessing;
 use App\Traits\ModelHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
